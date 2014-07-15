@@ -385,6 +385,117 @@ pQuery.then(function(data){
 ---
 
 # Seminar 3 - Module 1
+## Promises 
+
+Done properly Chaining allows your code to look like this:
+
+```javascript
+promise
+  .then(doSomething)
+  .then(doSomethingElse)
+  .then(doSomethingMore)
+  .catch(logError);
+```
+
+^ best practice: (or at least a strong convention) is to indent and start your line with the period when using fluid interfaces like this. 
+
+---
+
+# Seminar 3 - Module 1
+## Promises 
+
+Lets see that in a real use case
+
+```javascript
+CustomerService.getCustomer(currentCustomer)
+    .then(CartService.getCart) // getCart() needs a customer object, returns a cart
+    .then(calculateTotals)
+    .then(CheckoutService.createCheckout) // createCheckout() needs a cart object, returns a checkout object
+    .then(function(checkout) {
+      $scope.checkout = checkout;
+    })
+    .catch($log.error)
+```
+
+---
+
+# Seminar 3 - Module 1
+## Promises 
+
+```javascript
+var deferred = $q.defer();
+var promise = deferred.promise;
+ 
+// resolve it after a second
+$timeout(function() {
+  deferred.resolve('foo');
+}, 1000);
+ 
+promise
+  .then(function(one) {
+    console.log('Promise one resolved with ', one);
+ 
+    var anotherDeferred = $q.defer();
+ 
+    // resolve after another second
+ 
+    $timeout(function() {
+      anotherDeferred.resolve('bar');
+    }, 1000);
+ 
+    return anotherDeferred.promise;
+  })
+  .then(function(two) {
+    console.log('Promise two resolved with ', two);
+  });
+```
+
+^ note the $q.defer() call, this generates an empty *defered* object
+^ promises are generated from the deferred.promise call.
+^ the various then blocks return their own promises, allowing the chain to continue. 
+^ promise flow control.
+
+---
+
+# Seminar 3 - Module 1
+## Additional Promise Features
+
+```javascript
+$q.all([promiseOne, promiseTwo, promiseThree])
+  .then(function(results) {
+    console.log(results[0], results[1], results[2]);
+  });
+```
+
+^ All this work needs to be done before I can do XYZ, but I don't care what order they run in.
+
+---
+
+# Seminar 3 - Module 1
+## Additional Promise Features
+
+```javascript
+$q.when('foo')
+  .then(function(bar) {
+    console.log(bar);
+  });
+ 
+$q.when(aPromise)
+  .then(function(baz) {
+    console.log(baz);
+  });
+ 
+$q.when(valueOrPromise)
+  .then(function(boz) {
+    // well you get the idea.
+  })
+```
+
+^ use $q.when to wrap arbitrary values in a promise, or when you're not sure if the value you've got has resolved.
+
+---
+
+# Seminar 3 - Module 1
 ## NgForce Overview
 
 - VFR
@@ -392,6 +503,30 @@ pQuery.then(function(data){
 - RemoteObjects
 
 ^ We're going to walk through the code on this one.
+
+---
+
+# Seminar 3 - Module 1
+## Heads up on Debugging.
+
+- Using Chrome or Safari? Install the ng-inspector plugin!
+- Get a handle on an Angular Scope for an element via:
+    + angular.element('#name').scope();
+    + angular.element('.class').isolateScope();
+- Grab ANY Service with:
+    + angular.element('html').injector().get('MyService')
+
+^ We talked about the first one yesterday, lets demo its use in a full blown app.
+^ rest are done in the JS console. 
+
+---
+
+# Seminar 3 - Module 1
+## Heads up on Debugging.
+
+- Access the Controller of a directive with:
+    + angular.element('my-pages').controller()
+- Chrome Only: $0 - $4 == Last 5 selectors
 
 ---
 
