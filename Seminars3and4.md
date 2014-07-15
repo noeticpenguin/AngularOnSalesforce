@@ -1,4 +1,5 @@
 # AngularJS Training
+## https://github.com/noeticpenguin/AngularOnSalesforce
 
 ---
 
@@ -395,7 +396,7 @@ pQuery.then(function(data){
 ---
 
 # Seminar 3 - Lab 1
-## Promises 
+## Lab 
 
 We're going to:
 - Build a Factories service that models out Contacts.
